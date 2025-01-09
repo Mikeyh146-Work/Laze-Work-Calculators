@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mikey's Lazy Calculators</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .calculator {
+            border: 1px solid #ccc;
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .calculator h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 18px;
+            color: red;
+        }
+        .countdown-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            justify-content: center;
+            align-items: center;
+        }
+        .countdown {
+            padding: 20px;
+            text-align: center;
+            background-color: #002b5c;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            max-width: 300px;
+        }
+        .countdown h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .countdown span {
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .christmas {
+            background-color: #8b0000;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Mikey's Lazy Calculators</h1>
+
+    <div class="container">
+
+        <!-- 12 Week Absence Date Calculator -->
+        <div class="calculator">
+            <h2>12 Week Absence Date Calculator</h2>
+            <div class="input-group">
+                <label>Select a Date</label>
+                <input type="date" id="inputDate">
+            </div>
+            <div class="result">
+                Date 12 Weeks Before: <span id="calculatedDate">-</span>
+            </div>
+        </div>
+
+        <!-- Staff Probation Review Calculator -->
+        <div class="calculator">
+            <h2>Staff Probation Review Calculator</h2>
+            <div class="input-group">
+                <label>Employee Start Date</label>
+                <input type="date" id="startDate">
+            </div>
+            <div class="result">
+                <p>4 Week Review: <span id="review4Week">-</span></p>
+                <p>8 Week Review: <span id="review8Week">-</span></p>
+                <p>12 Week Review: <span id="review12Week">-</span></p>
+                <p>6 Month Probation: <span id="review6Month">-</span></p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Countdown Timers -->
+    <div class="countdown-container">
+
+        <!-- Friday Changeover Countdown -->
+        <div class="countdown">
+            <h2>Next Friday Changeover!</h2>
+            <p>Time Left: <span id="fridayCountdown">Calculating...</span></p>
+        </div>
+
+        <!-- Christmas Countdown Timer -->
+        <div class="countdown christmas">
+            <h2>Christmas Transition!</h2>
+            <p>Time Left: <span id="christmasCountdown">Calculating...</span></p>
+        </div>
+
+        <!-- Monday Changeover Countdown -->
+        <div class="countdown">
+            <h2>Next Monday Changeover</h2>
+            <p>Time Left: <span id="mondayCountdown">Calculating...</span></p>
+        </div>
+
+    </div>
+
+    <script>
+        // 12 Week Absence Date Calculator
+        function calculateDate() {
+            const inputDate = document.getElementById('inputDate').value;
+
+            if (inputDate) {
+                const selectedDate = new Date(inputDate);
+                selectedDate.setDate(selectedDate.getDate() - 12 * 7); // Subtract 12 weeks
+
+                const day = String(selectedDate.getDate()).padStart(2, '0');
+                const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+                const year = selectedDate.getFullYear();
+
+                const formattedDate = `${day}-${month}-${year}`; // Format as DD-MM-YYYY
+                document.getElementById('calculatedDate').textContent = formattedDate;
+            } else {
+                document.getElementById('calculatedDate').textContent = '-';
+            }
+        }
+
+        document.getElementById('inputDate').addEventListener('input', calculateDate);
+
+        // Staff Probation Review Calculator
+        function calculateProbationDates() {
+            const startDate = document.getElementById('startDate').value;
+
+            if (startDate) {
+                const start = new Date(startDate);
+
+                const addWeeks = (date, weeks) => {
+                    const result = new Date(date);
+                    result.setDate(result.getDate() + weeks * 7);
+                    const day = String(result.getDate()).padStart(2, '0');
+                    const month = String(result.getMonth() + 1).padStart(2, '0');
+                    const year = result.getFullYear();
+                    return `${day}-${month}-${year}`;
+                };
+
+                document.getElementById('review4Week').textContent = addWeeks(start, 4);
+                document.getElementById('review8Week').textContent = addWeeks(start, 8);
+                document.getElementById('review12Week').textContent = addWeeks(start, 12);
+
+                const sixMonthDate = new Date(start);
+                sixMonthDate.setMonth(sixMonthDate.getMonth() + 6);
+                const day = String(sixMonthDate.getDate()).padStart(2, '0');
+                const month = String(sixMonthDate.getMonth() + 1).padStart(2, '0');
+                const year = sixMonthDate.getFullYear();
+
+                document.getElementById('review6Month').textContent = `${day}-${month}-${year}`;
+            } else {
+                document.getElementById('review4Week').textContent = '-';
+                document.getElementById('review8Week').textContent = '-';
+                document.getElementById('review12Week').textContent = '-';
+                document.getElementById('review6Month').textContent = '-';
+            }
+        }
+
+        document.getElementById('startDate').addEventListener('input', calculateProbationDates);
+
+        // Countdown Timer Helper
+       function updateCountdownTimer(targetDate, elementId) {
+        const now = new Date();
+        const diff = targetDate - now;
+
+        if (diff > 0) {
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000); // Fix: correct seconds calculation
+
+            const countdownText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            document.getElementById(elementId).textContent = countdownText;
+        } else {
+            document.getElementById(elementId).textContent = "Time's up!";
+        }
+    }
+        // Friday Changeover Countdown (every Friday 5pm)
+    function fridayCountdown() {
+        const now = new Date();
+        const nextFriday = new Date(now);
+        nextFriday.setDate(now.getDate() + (5 - now.getDay() + 7) % 7); // Next Friday
+        nextFriday.setHours(17, 0, 0, 0); // Set to 5 PM
+
+        updateCountdownTimer(nextFriday, 'fridayCountdown');
+    }
+
+        // Christmas Countdown
+        function christmasCountdown() {
+            const now = new Date();
+            const christmas = new Date(now.getFullYear(), 11, 25); // December 25th of current year
+            if (now > christmas) {
+                christmas.setFullYear(now.getFullYear() + 1); // Set to next year if Christmas has passed
+            }
+
+            updateCountdownTimer(christmas, 'christmasCountdown');
+        }
+
+        // Monday Changeover Countdown (every Monday 9am)
+        function mondayCountdown() {
+            const now = new Date();
+            const nextMonday = new Date(now);
+            nextMonday.setDate(now.getDate() + (1 - now.getDay() + 7) % 7); // Next Monday
+            nextMonday.setHours(9, 0, 0, 0); // Set to 9 AM
+
+            updateCountdownTimer(nextMonday, 'mondayCountdown');
+        }
+
+        // Update countdowns every second
+        setInterval(() => {
+            fridayCountdown();
+            christmasCountdown();
+            mondayCountdown();
+        }, 1000);
+    </script>
+
+</body>
+</html>
